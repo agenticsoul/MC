@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentforce: Becoming an Agentic Organisation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+  :root {
+    --sf-blue: #0070D2;
+    --sf-dark: #032D60;
+    --sf-teal: #00A1E0;
+    --sf-light: #F3F8FF;
+    --sf-accent: #FF6B35;
+    --sf-green: #2E844A;
+    --sf-purple: #7B5EA7;
+    --white: #FFFFFF;
+    --slate: #1A2332;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #0A0F1E;
+    color: var(--white);
+    min-height: 100vh;
+  }
+
+  /* NAV DOTS */
+  .nav {
+    position: fixed;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+  }
+  .nav-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.3);
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .nav-dot.active { background: var(--sf-teal); transform: scale(1.4); }
+
+  /* SLIDES */
+  .slide {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ─── SLIDE 1: TITLE ─── */
+  .slide-title {
+    background: linear-gradient(135deg, #032D60 0%, #0A0F1E 50%, #032D60 100%);
+  }
+  .slide-title::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(0,161,224,0.15) 0%, transparent 70%);
+  }
+  .sf-logo {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    color: var(--sf-teal);
+    text-transform: uppercase;
+    margin-bottom: 3rem;
+    opacity: 0.9;
+  }
+  .title-eyebrow {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--sf-teal);
+    margin-bottom: 1.2rem;
+  }
+  .title-main {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.8rem, 5vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    color: var(--white);
+    margin-bottom: 1.5rem;
+  }
+  .title-main span { color: var(--sf-teal); }
+  .title-sub {
+    font-size: 1.15rem;
+    font-weight: 300;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px;
+    line-height: 1.6;
+    margin-bottom: 3rem;
+  }
+  .title-pills {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .pill {
+    padding: 6px 16px;
+    border-radius: 100px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid;
+  }
+  .pill-blue { border-color: var(--sf-teal); color: var(--sf-teal); }
+  .pill-orange { border-color: var(--sf-accent); color: var(--sf-accent); }
+  .title-graphic {
+    position: absolute;
+    right: 6%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 380px;
+    height: 380px;
+    opacity: 0.6;
+  }
+  .orbit-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid rgba(0,161,224,0.3);
+    animation: spin 20s linear infinite;
+  }
+  .orbit-ring:nth-child(1) { width: 100%; height: 100%; top: 0; left: 0; }
+  .orbit-ring:nth-child(2) { width: 72%; height: 72%; top: 14%; left: 14%; animation-duration: 14s; animation-direction: reverse; border-color: rgba(255,107,53,0.25); }
+  .orbit-ring:nth-child(3) { width: 46%; height: 46%; top: 27%; left: 27%; animation-duration: 8s; border-color: rgba(123,94,167,0.3); }
+  .orbit-dot {
+    position: absolute;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--sf-teal);
+    top: -5px; left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 12px var(--sf-teal);
+  }
+  .center-dot {
+    position: absolute;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--sf-accent);
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 20px var(--sf-accent);
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* SLIDE LABEL */
+  .slide-num {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 80px;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.3);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* ─── SLIDE 2: MATURITY MODEL ─── */
+  .slide-maturity {
+    background: #06111F;
+  }
+  .slide-maturity::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--sf-blue), var(--sf-teal), var(--sf-purple));
+  }
+  .slide-header {
+    margin-bottom: 0.5rem;
+  }
+  .slide-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--sf-teal);
+    margin-bottom: 0.6rem;
+  }
+  .slide-title-h {
+    font-family: 'Syne', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 0.3rem;
+  }
+  .slide-desc {
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 2rem;
+  }
+
+  /* Maturity staircase */
+  .maturity-container {
+    display: flex;
+    gap: 16px;
+    align-items: flex-end;
+    height: 340px;
+  }
+  .maturity-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .maturity-stage:hover { transform: translateY(-4px); }
+  .stage-bar {
+    border-radius: 6px 6px 0 0;
+    position: relative;
+    transition: all 0.3s;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 14px 12px;
+    overflow: hidden;
+  }
+  .stage-bar::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: inherit;
+    filter: brightness(1.8);
+  }
+  .stage-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+    opacity: 0.25;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .stage-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .stage-bullets {
+    list-style: none;
+    font-size: 0.68rem;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.5;
+  }
+  .stage-bullets li::before { content: '→ '; opacity: 0.6; }
+  .stage-label-bottom {
+    margin-top: 10px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    text-align: center;
+    color: rgba(255,255,255,0.4);
+  }
+
+  /* Stage colors & heights */
+  .s1 .stage-bar { height: 120px; background: rgba(0,112,210,0.25); border: 1px solid rgba(0,112,210,0.4); }
+  .s2 .stage-bar { height: 170px; background: rgba(0,161,224,0.22); border: 1px solid rgba(0,161,224,0.4); }
+  .s3 .stage-bar { height: 220px; background: rgba(123,94,167,0.25); border: 1px solid rgba(123,94,167,0.45); }
+  .s4 .stage-bar { height: 268px; background: rgba(255,107,53,0.2); border: 1px solid rgba(255,107,53,0.4); }
+  .s5 .stage-bar { height: 316px; background: rgba(46,132,74,0.25); border: 1px solid rgba(46,132,74,0.45); }
+  .s1 .stage-num { color: var(--sf-blue); }
+  .s2 .stage-num { color: var(--sf-teal); }
+  .s3 .stage-num { color: var(--sf-purple); }
+  .s4 .stage-num { color: var(--sf-accent); }
+  .s5 .stage-num { color: var(--sf-green); }
+  .s1 .stage-label-bottom { color: rgba(0,112,210,0.6); }
+  .s2 .stage-label-bottom { color: rgba(0,161,224,0.6); }
+  .s3 .stage-label-bottom { color: rgba(123,94,167,0.7); }
+  .s4 .stage-label-bottom { color: rgba(255,107,53,0.7); }
+  .s5 .stage-label-bottom { color: rgba(46,132,74,0.7); }
+
+  /* Arrow at top right */
+  .maturity-arrow {
+    position: absolute;
+    bottom: 3.5rem;
+    right: 80px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    font-style: italic;
+  }
+  .maturity-arrow::before {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25));
+  }
+
+  /* ─── SLIDE 3: AGENT FACTORY ─── */
+  .slide-factory {
+    background: #06111F;
+  }
+  .slide-factory::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--sf-purple), var(--sf-accent), var(--sf-teal));
+  }
+
+  .factory-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 14px;
+    margin-top: 1rem;
+  }
+  .factory-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.09);
+    border-radius: 10px;
+    padding: 18px 20px;
+    transition: all 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .factory-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+  }
+  .factory-card:hover {
+    border-color: rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.07);
+    transform: translateY(-2px);
+  }
+  .fc-blue::before { background: var(--sf-blue); }
+  .fc-teal::before { background: var(--sf-teal); }
+  .fc-purple::before { background: var(--sf-purple); }
+  .fc-orange::before { background: var(--sf-accent); }
+  .fc-green::before { background: var(--sf-green); }
+  .fc-span::before { background: linear-gradient(90deg, var(--sf-teal), var(--sf-purple)); }
+
+  .card-icon {
+    font-size: 1.4rem;
+    margin-bottom: 8px;
+    display: block;
+  }
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 6px;
+  }
+  .card-desc {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.55);
+    line-height: 1.5;
+  }
+  .card-tag {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 0.62rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .tag-blue { background: rgba(0,112,210,0.2); color: #5DB8FF; border: 1px solid rgba(0,112,210,0.35); }
+  .tag-teal { background: rgba(0,161,224,0.2); color: #5CD8FF; border: 1px solid rgba(0,161,224,0.35); }
+  .tag-purple { background: rgba(123,94,167,0.2); color: #C3A9E8; border: 1px solid rgba(123,94,167,0.35); }
+  .tag-orange { background: rgba(255,107,53,0.2); color: #FFB494; border: 1px solid rgba(255,107,53,0.35); }
+  .tag-green { background: rgba(46,132,74,0.2); color: #7ED39A; border: 1px solid rgba(46,132,74,0.35); }
+
+  .fc-span {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 20px 28px;
+  }
+  .fc-span .card-icon { font-size: 2rem; margin-bottom: 0; flex-shrink: 0; }
+  .fc-span-content { flex: 1; }
+  .fc-span-content .card-title { font-size: 1rem; margin-bottom: 4px; }
+  .fc-span-kpis {
+    display: flex;
+    gap: 24px;
+    margin-top: 10px;
+  }
+  .kpi { text-align: center; }
+  .kpi-val {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--sf-teal);
+    line-height: 1;
+  }
+  .kpi-label {
+    font-size: 0.62rem;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 2px;
+  }
+
+  /* ─── SLIDE 4: ROADMAP ─── */
+  .slide-roadmap {
+    background: #06111F;
+  }
+  .slide-roadmap::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--sf-green), var(--sf-teal), var(--sf-blue));
+  }
+
+  .roadmap-phases {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 1.2rem;
+    position: relative;
+  }
+  .roadmap-phases::before {
+    content: '';
+    position: absolute;
+    top: 56px;
+    left: 12.5%;
+    right: 12.5%;
+    height: 2px;
+    background: linear-gradient(90deg,
+      rgba(0,112,210,0.6),
+      rgba(0,161,224,0.6),
+      rgba(123,94,167,0.6),
+      rgba(46,132,74,0.6));
+    z-index: 0;
+  }
+  .phase {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+  }
+  .phase-circle {
+    width: 52px; height: 52px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Syne', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin-bottom: 14px;
+    position: relative;
+    z-index: 1;
+  }
+  .p1 .phase-circle { background: rgba(0,112,210,0.2); border: 2px solid var(--sf-blue); color: var(--sf-blue); }
+  .p2 .phase-circle { background: rgba(0,161,224,0.2); border: 2px solid var(--sf-teal); color: var(--sf-teal); }
+  .p3 .phase-circle { background: rgba(123,94,167,0.2); border: 2px solid var(--sf-purple); color: var(--sf-purple); }
+  .p4 .phase-circle { background: rgba(46,132,74,0.2); border: 2px solid var(--sf-green); color: var(--sf-green); }
+
+  .phase-duration {
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    opacity: 0.55;
+  }
+  .p1 .phase-duration { color: var(--sf-blue); }
+  .p2 .phase-duration { color: var(--sf-teal); }
+  .p3 .phase-duration { color: var(--sf-purple); }
+  .p4 .phase-duration { color: var(--sf-green); }
+
+  .phase-name {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+  .phase-items {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 12px 14px;
+    text-align: left;
+    width: 100%;
+  }
+  .phase-item {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.6);
+    padding: 4px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    line-height: 1.4;
+  }
+  .phase-item:last-child { border-bottom: none; }
+  .phase-item-dot {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 5px;
+  }
+  .p1 .phase-item-dot { background: var(--sf-blue); }
+  .p2 .phase-item-dot { background: var(--sf-teal); }
+  .p3 .phase-item-dot { background: var(--sf-purple); }
+  .p4 .phase-item-dot { background: var(--sf-green); }
+
+  .outcome-bar {
+    margin-top: 20px;
+    background: rgba(0,161,224,0.07);
+    border: 1px solid rgba(0,161,224,0.18);
+    border-radius: 8px;
+    padding: 14px 20px;
+    display: flex;
+    gap: 40px;
+    align-items: center;
+  }
+  .outcome-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--sf-teal);
+    white-space: nowrap;
+    margin-right: 8px;
+  }
+  .outcomes {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+  .outcome {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.55);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .outcome::before {
+    content: '✓';
+    color: var(--sf-green);
+    font-weight: 700;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav class="nav">
+  <div class="nav-dot active" onclick="scrollTo(0)"></div>
+  <div class="nav-dot" onclick="scrollTo(1)"></div>
+  <div class="nav-dot" onclick="scrollTo(2)"></div>
+  <div class="nav-dot" onclick="scrollTo(3)"></div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     SLIDE 1 — TITLE
+═══════════════════════════════════════ -->
+<section class="slide slide-title" id="slide-0">
+  <div class="sf-logo">Salesforce · Agentforce</div>
+  <div class="title-eyebrow">Strategic Framework</div>
+  <h1 class="title-main">Becoming an<br><span>Agentic Organisation</span></h1>
+  <p class="title-sub">A maturity model and Agent Factory blueprint for scaling AI agents on the Salesforce Platform — from first pilot to autonomous, multi-agent orchestration.</p>
+  <div class="title-pills">
+    <span class="pill pill-blue">Agentforce 2.0</span>
+    <span class="pill pill-orange">Agent Factory</span>
+    <span class="pill pill-blue">Einstein AI</span>
+    <span class="pill pill-blue">Data Cloud</span>
+  </div>
+
+  <!-- Decorative orbital -->
+  <div class="title-graphic">
+    <div class="orbit-ring"><div class="orbit-dot"></div></div>
+    <div class="orbit-ring"><div class="orbit-dot" style="background:var(--sf-accent);box-shadow:0 0 12px var(--sf-accent)"></div></div>
+    <div class="orbit-ring"><div class="orbit-dot" style="background:var(--sf-purple);box-shadow:0 0 12px var(--sf-purple)"></div></div>
+    <div class="center-dot"></div>
+  </div>
+
+  <span class="slide-num">01 / 04 — Overview</span>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     SLIDE 2 — MATURITY MODEL
+═══════════════════════════════════════ -->
+<section class="slide slide-maturity" id="slide-1">
+  <div class="slide-header">
+    <p class="slide-label">Agentforce Maturity Model</p>
+    <h2 class="slide-title-h">Five Stages to Agentic Maturity</h2>
+    <p class="slide-desc">Each stage represents a meaningful leap in autonomy, integration depth, and business value delivered through AI agents.</p>
+  </div>
+
+  <div class="maturity-container">
+
+    <div class="maturity-stage s1">
+      <div class="stage-bar">
+        <div class="stage-num">1</div>
+        <div class="stage-title">Assist</div>
+        <ul class="stage-bullets">
+          <li>Copilot in Flow</li>
+          <li>Einstein prompts</li>
+          <li>Manual triggers</li>
+        </ul>
+      </div>
+      <div class="stage-label-bottom">Assisted</div>
+    </div>
+
+    <div class="maturity-stage s2">
+      <div class="stage-bar">
+        <div class="stage-num">2</div>
+        <div class="stage-title">Automate</div>
+        <ul class="stage-bullets">
+          <li>Single-task agents</li>
+          <li>Apex / MuleSoft</li>
+          <li>Prompted decisions</li>
+        </ul>
+      </div>
+      <div class="stage-label-bottom">Automated</div>
+    </div>
+
+    <div class="maturity-stage s3">
+      <div class="stage-bar">
+        <div class="stage-num">3</div>
+        <div class="stage-title">Augment</div>
+        <ul class="stage-bullets">
+          <li>Agent Topics & Actions</li>
+          <li>Data Cloud grounding</li>
+          <li>CRM-embedded agents</li>
+          <li>Human-in-the-loop</li>
+        </ul>
+      </div>
+      <div class="stage-label-bottom">Augmented</div>
+    </div>
+
+    <div class="maturity-stage s4">
+      <div class="stage-bar">
+        <div class="stage-num">4</div>
+        <div class="stage-title">Orchestrate</div>
+        <ul class="stage-bullets">
+          <li>Multi-agent pipelines</li>
+          <li>Agent-to-agent calls</li>
+          <li>Cross-cloud processes</li>
+          <li>Proactive triggers</li>
+          <li>Feedback loops</li>
+        </ul>
+      </div>
+      <div class="stage-label-bottom">Orchestrated</div>
+    </div>
+
+    <div class="maturity-stage s5">
+      <div class="stage-bar">
+        <div class="stage-num">5</div>
+        <div class="stage-title">Autonomous</div>
+        <ul class="stage-bullets">
+          <li>Self-improving agents</li>
+          <li>Autonomous decisioning</li>
+          <li>Agent Factory ops</li>
+          <li>Enterprise-wide scale</li>
+          <li>Continuous eval & tuning</li>
+          <li>Governance at scale</li>
+        </ul>
+      </div>
+      <div class="stage-label-bottom">Autonomous</div>
+    </div>
+
+  </div>
+
+  <div class="maturity-arrow">Increasing autonomy & business value →</div>
+  <span class="slide-num">02 / 04 — Maturity Model</span>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     SLIDE 3 — AGENT FACTORY
+═══════════════════════════════════════ -->
+<section class="slide slide-factory" id="slide-2">
+  <div class="slide-header">
+    <p class="slide-label">Proposed Operating Model</p>
+    <h2 class="slide-title-h">Agent Factory</h2>
+    <p class="slide-desc">A dedicated internal capability to discover, build, govern, and scale agents systematically — rather than one-off pilots.</p>
+  </div>
+
+  <div class="factory-grid">
+
+    <div class="factory-card fc-blue">
+      <span class="card-icon">🔍</span>
+      <div class="card-title">Discover & Prioritise</div>
+      <div class="card-desc">Run use-case discovery workshops with business units. Score candidates by effort vs. ROI. Maintain a live backlog of agent opportunities.</div>
+      <span class="card-tag tag-blue">Centre of Excellence</span>
+    </div>
+
+    <div class="factory-card fc-teal">
+      <span class="card-icon">🏗️</span>
+      <div class="card-title">Build & Template</div>
+      <div class="card-desc">Reusable Agent Templates in Agent Builder. Standard Topics, Actions, and prompt libraries. Low-code first; Apex where needed.</div>
+      <span class="card-tag tag-teal">Agentforce Builder</span>
+    </div>
+
+    <div class="factory-card fc-purple">
+      <span class="card-icon">🛡️</span>
+      <div class="card-title">Govern & Trust</div>
+      <div class="card-desc">Guardrails, escalation paths, and audit logs built-in. Einstein Trust Layer for data privacy. Human review gates for high-risk decisions.</div>
+      <span class="card-tag tag-purple">Trust Layer</span>
+    </div>
+
+    <div class="factory-card fc-orange">
+      <span class="card-icon">📊</span>
+      <div class="card-title">Measure & Iterate</div>
+      <div class="card-desc">Agent performance dashboards in CRM Analytics. Track containment rate, CSAT, task completion, and time-to-resolution per agent.</div>
+      <span class="card-tag tag-orange">CRM Analytics</span>
+    </div>
+
+    <div class="factory-card fc-teal">
+      <span class="card-icon">🔗</span>
+      <div class="card-title">Integrate & Extend</div>
+      <div class="card-desc">Connect to MuleSoft APIs, Data Cloud, Slack, and third-party systems. Agent Network for cross-cloud orchestration and delegation.</div>
+      <span class="card-tag tag-teal">MuleSoft · Data Cloud</span>
+    </div>
+
+    <div class="factory-card fc-green">
+      <span class="card-icon">🚀</span>
+      <div class="card-title">Scale & Operationalise</div>
+      <div class="card-desc">Promote agents from sandbox to production via DevOps Center. Maintain an agent catalogue. Drive adoption with enablement programmes.</div>
+      <span class="card-tag tag-green">DevOps Center</span>
+    </div>
+
+  </div>
+
+  <span class="slide-num">03 / 04 — Agent Factory</span>
+</section>
+
+
+<!-- ═══════════════════════════════════════
+     SLIDE 4 — ROADMAP
+═══════════════════════════════════════ -->
+<section class="slide slide-roadmap" id="slide-3">
+  <div class="slide-header">
+    <p class="slide-label">Adoption Roadmap</p>
+    <h2 class="slide-title-h">From Pilot to Autonomous Organisation</h2>
+    <p class="slide-desc">A phased approach to standing up the Agent Factory and climbing the maturity curve.</p>
+  </div>
+
+  <div class="roadmap-phases">
+
+    <div class="phase p1">
+      <div class="phase-circle">1</div>
+      <div class="phase-duration">Months 1–3</div>
+      <div class="phase-name">Foundation</div>
+      <div class="phase-items">
+        <div class="phase-item"><div class="phase-item-dot"></div>Agentforce licence & enablement</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>Data Cloud activation</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>2–3 quick-win pilots (Service, Sales)</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>CoE team formed</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>Governance framework</div>
+      </div>
+    </div>
+
+    <div class="phase p2">
+      <div class="phase-circle">2</div>
+      <div class="phase-duration">Months 4–6</div>
+      <div class="phase-name">Agent Factory MVP</div>
+      <div class="phase-items">
+        <div class="phase-item"><div class="phase-item-dot"></div>Agent Builder templates library</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>Use-case backlog & scoring model</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>First production agents live</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>Performance dashboards</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>Prompt engineering standards</div>
+      </div>
+    </div>
+
+    <div class="phase p3">
+      <div class="phase-circle">3</div>
+      <div class="phase-duration">Months 7–12</div>
+      <div class="phase-name">Scale & Orchestrate</div>
+      <div class="phase-items">
+        <div class="phase-item"><div class="phase-item-dot"></div>Multi-agent orchestration</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>MuleSoft & Slack integrations</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>5–10 agents in production</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>Agent catalogue published</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>Cross-dept rollout</div>
+      </div>
+    </div>
+
+    <div class="phase p4">
+      <div class="phase-circle">4</div>
+      <div class="phase-duration">Year 2+</div>
+      <div class="phase-name">Autonomous Org</div>
+      <div class="phase-items">
+        <div class="phase-item"><div class="phase-item-dot"></div>Self-improving agent loops</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>Proactive, event-driven agents</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>20+ agents enterprise-wide</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>Agent-first process design</div>
+        <div class="phase-item"><div class="phase-item-dot"></div>Continuous maturity review</div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="outcome-bar">
+    <span class="outcome-title">Target Outcomes</span>
+    <div class="outcomes">
+      <span class="outcome">30–50% routine task automation</span>
+      <span class="outcome">Faster time-to-resolution</span>
+      <span class="outcome">Scalable CoE & agent catalogue</span>
+      <span class="outcome">Measurable ROI per agent</span>
+      <span class="outcome">Trusted, governed AI at scale</span>
+    </div>
+  </div>
+
+  <span class="slide-num">04 / 04 — Roadmap</span>
+</section>
+
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const dots = document.querySelectorAll('.nav-dot');
+
+  function scrollTo(idx) {
+    slides[idx].scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Update active dot on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const idx = [...slides].indexOf(entry.target);
+        dots.forEach(d => d.classList.remove('active'));
+        if (dots[idx]) dots[idx].classList.add('active');
+      }
+    });
+  }, { threshold: 0.5 });
+
+  slides.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
