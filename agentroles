@@ -1,0 +1,39 @@
+flowchart TB
+    %% Styles
+    classDef user fill:#4A90E2,stroke:#2c5aa0,color:white,stroke-width:2px
+    classDef profile fill:#7B68EE,stroke:#5a4fcf,color:white
+    classDef psg fill:#50C878,stroke:#3a9a5a,color:white
+    classDef role fill:#FF9F43,stroke:#e67e22,color:white
+    classDef group fill:#FF6B6B,stroke:#e74c3c,color:white
+    classDef queue fill:#9B59B6,stroke:#8e44ad,color:white
+    classDef agent fill:#1ABC9C,stroke:#16a085,color:white
+    classDef access fill:#F1C40F,stroke:#f39c12,color:#333
+
+    User(["👤 User / Agentforce Agent"]):::user
+
+    User --> Profile["📋 Profile<br/>(Baseline access)"]:::profile
+    User --> PSG["📦 Permission Set Group(s)<br/>(Job Persona)"]:::psg
+    User --> Role["🏛 Role<br/>(Hierarchy)"]:::role
+    User --> PG["👥 Public Group(s)"]:::group
+    User --> Queue["📥 Queue Membership"]:::queue
+
+    PSG --> PS1["Permission Set A"]
+    PSG --> PS2["Permission Set B"]
+    PSG --> PS3["Permission Set C"]
+
+    Role --> Hierarchy["Role Hierarchy<br/>(Managers see subordinates’ records)"]
+
+    PG --> Sharing["Sharing Rules<br/>+ Manual Sharing"]
+    Queue --> Ownership["Record Ownership<br/>(Take from Queue)"]
+
+    Profile & PS1 & PS2 & PS3 --> Functional["Functional Access<br/>• Object CRUD<br/>• Field Level Security<br/>• System Permissions<br/>• Apex / Flows / etc."]:::access
+
+    Hierarchy & Sharing & Ownership --> Record["Record-Level Access<br/>• What records can I see?<br/>• What records can I own?"]:::access
+
+    Functional --> Final["✅ Effective Access"]
+    Record --> Final
+
+    %% Agentforce callout
+    Agent["🤖 Agentforce"]:::agent
+    Agent -.->|Employee Agent<br/>runs as logged-in user| User
+    Agent -.->|Service Agent<br/>runs as dedicated Agent User| User
