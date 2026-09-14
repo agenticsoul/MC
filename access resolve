@@ -1,0 +1,29 @@
+flowchart TD
+    Start([User wants to access a Record]) --> Check1{Has Object Permission?<br/>Profile + Permission Set Groups}
+
+    Check1 -->|No| Deny1[❌ Access Denied]
+    Check1 -->|Yes| Check2{Is Record Owner?}
+
+    Check2 -->|Yes| Full[✅ Full Access<br/>Read / Edit / Delete / Share]
+    Check2 -->|No| Check3{Shared via<br/>Role Hierarchy?}
+
+    Check3 -->|Yes| Access[✅ Access Granted<br/>Read or Read/Write]
+    Check3 -->|No| Check4{Shared via<br/>Public Group + Sharing Rule<br/>or Manual Share?}
+
+    Check4 -->|Yes| Access
+    Check4 -->|No| Check5{Record owned by<br/>a Queue that user belongs to?}
+
+    Check5 -->|Yes| AccessQ[✅ Can view & Take Ownership]
+    Check5 -->|No| Deny2[❌ Access Denied]
+
+    %% Highlight box for Public Group + Queue relationship
+    subgraph Together ["🔗 How Public Groups & Queues work together"]
+        direction TB
+        PG[Public Group] -->|Can be added as| QM[Queue Member]
+        QM --> Effect1[Users in the Public Group<br/>can see the Queue list view<br/>and take ownership of records]
+        PG -->|Also used in| SR[Sharing Rules]
+        SR --> Effect2[Gives visibility to records<br/>even when they are NOT<br/>owned by a Queue]
+    end
+
+    Check4 -.-> Together
+    Check5 -.-> Together
